@@ -8,7 +8,6 @@ public class User {
     private final PrivateKey privateKey;
     public final PublicKey publicKey;
     public final byte[] address;
-    private int money=0;
 
     public User(String name) throws NoSuchAlgorithmException {
         this.name=name;
@@ -22,8 +21,22 @@ public class User {
         address = digest.digest(publicKey.getEncoded());
 
     }
-    public byte[] encrypt(String plainText, PrivateKey privateKey) throws Exception {
+
+
+
+    public transaction make_transaction(String data,byte[]target_address) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] dataBytes = data.getBytes();
+        byte[] dataHash = digest.digest(data.getBytes());
+        //hash the message and generate the signature
+        byte[] signature = this.digital_signature_generation(new String(dataHash));
+        transaction transaction=new transaction(this.address,target_address,data,signature);
+
+        return transaction;
+    }
+    public byte[] digital_signature_generation(String plainText) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA");
+        //using private key to encrpt the message
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
         byte[] cipherText = cipher.doFinal(plainText.getBytes());
         return cipherText;
