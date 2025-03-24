@@ -32,19 +32,18 @@ public class User {
         this.wallet = wallet;
     }
 
-    public transaction make_transaction(double data, byte[]target_address) throws Exception {
+    public transaction make_transaction(double data, byte[] target_address) throws Exception {
         if(data<wallet){
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             setWallet(wallet-data);
 
-
+            //Convert double to byte array
             byte[] dataBytes = ByteBuffer.allocate(8).putDouble(data).array();
 
             byte[] dataHash = digest.digest(dataBytes);
             //hash the message and generate the signature
             byte[] signature = this.digital_signature_generation(new String(dataHash));
-            transaction transaction=new transaction(this.address,target_address,data,signature);
-
+            transaction transaction=new transaction(this.address, target_address, data,signature);
             return transaction;
         }
         else{

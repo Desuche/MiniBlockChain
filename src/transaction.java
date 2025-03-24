@@ -20,12 +20,13 @@ public class transaction {
         byte[] headerContent = ByteBuffer.allocate(header_length).put(dataBytes).put(signature).put(this.sender_address).put(this.receiver_address).array();
         // the transaction ID is calculated by taking a hash of the transaction contents.
         this.transactionID = digest.digest(headerContent);
-        //using sha256 to hash the message
+        //using sha256 to hash the message]
+        
+
 
 
 
     }
-
     public double getData() {
         return data;
     }
