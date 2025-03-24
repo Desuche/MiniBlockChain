@@ -3,9 +3,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class transaction {
-    byte[] transactionID;
-    double data;
-    byte[] signature;
+    public byte[] transactionID;
+    public double data;
+    public byte[] signature;
     public final byte[] sender_address;
     public final byte[] receiver_address;
     public transaction( byte[]sender_address,byte[]receiver_address,double data,byte []signature) throws NoSuchAlgorithmException {
@@ -21,7 +21,7 @@ public class transaction {
         // the transaction ID is calculated by taking a hash of the transaction contents.
         this.transactionID = digest.digest(headerContent);
         //using sha256 to hash the message]
-        
+
 
 
 

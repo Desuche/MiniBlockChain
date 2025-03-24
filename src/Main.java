@@ -1,6 +1,8 @@
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -24,10 +26,35 @@ public class Main {
             // not enough, we make it to make transaction each time between 1 and 10
         
             transactions[i] = users[input].make_transaction(random.nextInt(10), users[output].address);
-            System.out.println(transactions[i]);
+            System.out.println(transactions[i]); 
             users[output].setWallet(transactions[i].getData() + users[output].getWallet());
         }
         System.out.println(Arrays.equals(transactions[0].transactionID, transactions[0].transactionID));
         System.out.println(Arrays.equals(transactions[0].transactionID, transactions[1].transactionID));
+
+        // Collect transaction IDs for Merkle Tree
+        List<byte[]> transactionIDs = new ArrayList<>();
+        for (transaction tx : transactions) {
+            transactionIDs.add(tx.transactionID);
+            System.out.printf("TX: %s%n", bytesToHex(tx.transactionID));
+        }
+
+        // Create Merkle Tree and calculate Merkle Root
+        MerkleTree merkleTree = new MerkleTree(transactionIDs);
+        byte[] merkleRoot = merkleTree.getMerkleRoot();
+        System.out.println("Merkle Root: " + bytesToHex(merkleRoot));
+
+        // Print all transactions under the Merkle Tree
+        merkleTree.printTransactions();
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }
