@@ -1,13 +1,8 @@
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlockChain {
-    public static byte[] miningTargetValue = new
-            BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
-            .toByteArray();
-
 
     private static BlockChain instance = null;
 
@@ -18,6 +13,9 @@ public class BlockChain {
         return instance;
     }
 
+    public byte[] miningTargetValue = new
+            BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
+            .toByteArray();
 
     public List<Block> blocks = new ArrayList<>();
 
@@ -32,14 +30,7 @@ public class BlockChain {
     }
 
     public boolean addBlock(Block block){
-        byte[] blockHashValue;
-        try{
-            blockHashValue = block.getHeaderHash();
-        } catch (
-        NoSuchAlgorithmException e){
-            System.err.println("Failed to add block: Error generating block header hash: " + e.toString());
-            return false;
-        }
+        byte[] blockHashValue = block.getHeaderHash();
 
         boolean isProofOfWorkSatisfied = new BigInteger(blockHashValue).compareTo(new BigInteger(miningTargetValue)) < 0;
         if (!isProofOfWorkSatisfied){

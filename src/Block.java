@@ -1,6 +1,7 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 
 public class Block {
@@ -15,17 +16,25 @@ public class Block {
 
 
 
-    public Block(byte[] previousBlockHash, List<Transaction> transactions, byte[] miningTargetValue) throws Exception {
+    public Block(byte[] previousBlockHash, Transaction[] transactions, byte[] miningTargetValue) throws Exception {
         this.previousBlockHash = previousBlockHash;
         this.timestamp = Instant.now().toString();
         this.nonce = 0L;
         this.difficulty = miningTargetValue;
-        this.merkleRoot = MerkleTree.createFromTransactionList(transactions).getMerkleRoot();
-        this.transactions = transactions;
+        List<Transaction> transactionList = Arrays.asList(transactions);
+        this.merkleRoot = MerkleTree.createFromTransactionList(transactionList).getMerkleRoot();
+        this.transactions = transactionList;
     }
 
-    public byte[] getHeaderHash() throws NoSuchAlgorithmException {
-        MessageDigest headerHash = MessageDigest.getInstance("SHA-256");
+    public byte[] getHeaderHash() {
+        MessageDigest headerHash = null;
+        try {
+            headerHash = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e){
+            System.err.println("NoSuchAlgorithmException when generating block hash: " + e);
+            System.exit(1);
+        }
+
         headerHash.update(previousBlockHash);
         headerHash.update(timestamp.getBytes());
         headerHash.update(nonce.byteValue());
@@ -40,11 +49,7 @@ public class Block {
 
 
     public void setBlockHash(){
-        try {
-            this.hash = this.getHeaderHash();
-        } catch (NoSuchAlgorithmException e){
-            System.err.println("Failed to generate header hash: " + e.toString());
-        }
+        this.hash = this.getHeaderHash();
 
     }
 
