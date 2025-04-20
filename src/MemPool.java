@@ -1,7 +1,5 @@
-import javafx.scene.layout.Pane;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class MemPool {
 
@@ -16,11 +14,15 @@ public class MemPool {
 
 
 
-    private List<Transaction> pendingTransactions;
+    private Queue<Transaction> pendingTransactions;
 
 
     private MemPool(){
-        this.pendingTransactions = new ArrayList<>();
+        this.pendingTransactions = new PriorityQueue<>();
+    }
+
+    public void addTransaction(Transaction transaction){
+        this.pendingTransactions.add(transaction);
     }
 
     public Transaction[] collectTransactions(int count){
@@ -28,18 +30,16 @@ public class MemPool {
         *  If the mempool has fewer than is requested, it returns as many as possible.
         */
 
-        Transaction[] transactions;
-        if (pendingTransactions.size() <= count){
-             transactions = pendingTransactions.toArray(new Transaction[0]);
-             pendingTransactions = new ArrayList<>();
-        } else {
-            transactions = new Transaction[count];
-            for (int i = 0; i < count; i ++){
-                transactions[i] = pendingTransactions.get(0);
-                pendingTransactions.remove(0);
-            }
+        count = Math.min(this.pendingTransactions.size(), count);
+        Transaction[] transactions = new Transaction[count];
+
+        for (int i = 0; i < count; i ++){
+            transactions[i] = this.pendingTransactions.poll();
         }
+
         return transactions;
     }
+
+
 
 }
