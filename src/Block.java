@@ -9,13 +9,13 @@ public class Block {
     public byte[] previousBlockHash;
     public String timestamp;
     public Long nonce;
-    public Long difficulty;
+    public byte[] difficulty;
     public byte[] merkleRoot;
     public List<Transaction> transactions;
 
 
 
-    public Block(byte[] previousBlockHash, List<Transaction> transactions, long miningTargetValue) throws Exception {
+    public Block(byte[] previousBlockHash, List<Transaction> transactions, byte[] miningTargetValue) throws Exception {
         this.previousBlockHash = previousBlockHash;
         this.timestamp = Instant.now().toString();
         this.nonce = 0L;
@@ -24,12 +24,12 @@ public class Block {
         this.transactions = transactions;
     }
 
-    public byte[] generateHeaderHash() throws NoSuchAlgorithmException {
+    public byte[] getHeaderHash() throws NoSuchAlgorithmException {
         MessageDigest headerHash = MessageDigest.getInstance("SHA-256");
         headerHash.update(previousBlockHash);
         headerHash.update(timestamp.getBytes());
         headerHash.update(nonce.byteValue());
-        headerHash.update(difficulty.byteValue());
+        headerHash.update(difficulty);
         headerHash.update(merkleRoot);
         return headerHash.digest();
     }
@@ -38,8 +38,14 @@ public class Block {
         this.nonce++;
     }
 
-    public void setHash(byte[] hash){
-        this.hash = hash;
+
+    public void setBlockHash(){
+        try {
+            this.hash = this.getHeaderHash();
+        } catch (NoSuchAlgorithmException e){
+            System.err.println("Failed to generate header hash: " + e.toString());
+        }
+
     }
 
     public byte[] getHash(){

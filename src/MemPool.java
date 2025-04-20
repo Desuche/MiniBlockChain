@@ -27,7 +27,7 @@ public class MemPool {
 
     public Transaction[] collectTransactions(int count){
         /* Removes and returns a specified number of transactions from the mempool.
-        *  If the mempool has fewer than is requested, it returns as many as possible.
+        *  If the mempool has fewer than requested, it returns as many as possible.
         */
 
         count = Math.min(this.pendingTransactions.size(), count);
