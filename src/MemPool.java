@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -18,7 +19,7 @@ public class MemPool {
 
 
     private MemPool(){
-        this.pendingTransactions = new PriorityQueue<>();
+        this.pendingTransactions = new LinkedList<>();
     }
 
     public void addTransaction(Transaction transaction){
@@ -38,6 +39,16 @@ public class MemPool {
         }
 
         return transactions;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("MemPool{\n");
+        for (Transaction tx : pendingTransactions) {
+            sb.append("  ").append(tx.toString()).append(",\n");
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
 
