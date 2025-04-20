@@ -1,6 +1,4 @@
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.nio.ByteBuffer;
 import java.security.*;
 public class User {
@@ -35,8 +33,8 @@ public class User {
         this.wallet = wallet;
     }
 
-    // Method to create a transaction
-    public transaction make_transaction(double data, byte[] target_address) throws Exception {
+    // Method to create a Transaction
+    public Transaction make_transaction(double data, byte[] target_address) throws Exception {
         if(data<wallet){ // Check if sufficient funds are available
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             setWallet(wallet-data); // Deduct the amount from the wallet
@@ -44,12 +42,12 @@ public class User {
             //Convert double to byte array
             byte[] dataBytes = ByteBuffer.allocate(8).putDouble(data).array();
 
-            // Hash the transaction data
+            // Hash the Transaction data
             byte[] dataHash = digest.digest(dataBytes);
-            // Generate a digital signature for the transaction
+            // Generate a digital signature for the Transaction
             byte[] signature = this.digital_signature_generation(new String(dataHash));
-            // Create and return a new transaction object
-            transaction transaction=new transaction(this.address, target_address, data,signature);
+            // Create and return a new Transaction object
+            Transaction transaction=new Transaction(this.address, target_address, data,signature);
             return transaction;
         }
         else{

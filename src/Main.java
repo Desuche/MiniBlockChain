@@ -1,4 +1,3 @@
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class Main {
         Random random = new Random();
 
         // Generate a random number of transactions (power of 2)
-        transaction[] transactions = new transaction[(int) Math.pow(2, 1 + random.nextInt(4))];
+        Transaction[] transactions = new Transaction[(int) Math.pow(2, 1 + random.nextInt(4))];
 
         // Generate random transactions between users
         for (int i = 0; i < transactions.length; i++) {
@@ -26,7 +25,7 @@ public class Main {
                 output = random.nextInt(3);
             } while (input == output);
 
-            // Create a transaction with a random amount between 1 and 10
+            // Create a Transaction with a random amount between 1 and 10
             transactions[i] = users[input].make_transaction(random.nextInt(10), users[output].address);
             System.out.println(transactions[i]);
 
@@ -34,15 +33,15 @@ public class Main {
             users[output].setWallet(transactions[i].getData() + users[output].getWallet());
         }
 
-        // Compare transaction IDs for equality
+        // Compare Transaction IDs for equality
         System.out.println(Arrays.equals(transactions[0].transactionID, transactions[0].transactionID));
         System.out.println(Arrays.equals(transactions[0].transactionID, transactions[1].transactionID));
 
-        // Collect transaction IDs for the Merkle Tree
+        // Collect Transaction IDs for the Merkle Tree
         List<byte[]> transactionIDs = new ArrayList<>();
-        for (transaction tx : transactions) {
+        for (Transaction tx : transactions) {
             transactionIDs.add(tx.transactionID);
-            System.out.printf("TX: %s%n", bytesToHex(tx.transactionID)); // Print transaction ID in hex
+            System.out.printf("TX: %s%n", bytesToHex(tx.transactionID)); // Print Transaction ID in hex
         }
 
         // Create a Merkle Tree and calculate the Merkle Root

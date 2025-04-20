@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MerkleTree {
-    private final List<byte[]> transactions; // List of transaction IDs
+    private final List<byte[]> transactions; // List of Transaction IDs
 
     // Constructor to initialize the Merkle Tree with a list of transactions
     public MerkleTree(List<byte[]> transactions) {
@@ -32,7 +32,7 @@ public class MerkleTree {
     public void printTransactions() throws Exception {
         System.out.println("Transactions under the Merkle Tree:");
         for (byte[] transaction : transactions) {
-            System.out.println(bytesToHex(transaction)); // Print each transaction ID in hex
+            System.out.println(bytesToHex(transaction)); // Print each Transaction ID in hex
         }
         System.out.println("Merkle Root: " + bytesToHex(getMerkleRoot())); // Print the Merkle Root
     }
