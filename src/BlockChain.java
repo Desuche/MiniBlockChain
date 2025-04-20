@@ -43,6 +43,20 @@ public class BlockChain {
 
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("BlockChain:\n");
+        sb.append("Number of Blocks: ").append(blocks.size()).append("\n\n");
+
+        for (int i = 0; i < blocks.size(); i++) {
+            sb.append("Block #").append(i).append(":\n");
+            sb.append(blocks.get(i).toString()).append("\n");
+        }
+
+        return sb.toString();
+    }
+
 
 
 }

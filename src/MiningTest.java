@@ -50,6 +50,9 @@ public class MiningTest {
         }
 
 
+        System.out.println("________________________BLOCKCHAIN_______________");
+        System.out.println(BlockChain.getInstance());
+
 
     }
 
