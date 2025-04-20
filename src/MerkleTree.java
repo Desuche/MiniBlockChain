@@ -3,12 +3,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MerkleTree {
+
+    public static MerkleTree createFromTransactionList (List<Transaction> transactions){
+        List<byte[]> transactionIDs = new ArrayList<>();
+        for (Transaction tx : transactions) {
+            transactionIDs.add(tx.transactionID);
+        }
+        return new MerkleTree(transactionIDs);
+    }
+
+
     private final List<byte[]> transactions; // List of Transaction IDs
 
     // Constructor to initialize the Merkle Tree with a list of transactions
     public MerkleTree(List<byte[]> transactions) {
         this.transactions = transactions;
     }
+
+
 
     // Method to calculate the Merkle Root
     public byte[] getMerkleRoot() throws Exception {
