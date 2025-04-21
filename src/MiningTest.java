@@ -1,6 +1,10 @@
 public class MiningTest {
-    public static void main(String[] args) throws Exception {
 
+    public static void main(String[] args) throws Exception{
+        miningTest2();
+    }
+
+    public static void miningTest1() throws Exception{
 
         // Create a mempool instance
         MemPool memPool = MemPool.getInstance();
@@ -23,13 +27,14 @@ public class MiningTest {
         memPool.addTransaction(tx3);
 
         System.out.println(memPool);
+        System.out.println();
 
         // Start the mining process
         Miner miner = new Miner();
         Block newBlock = miner.mine(); // Attempt to mine a new block
 
         if (newBlock != null) {
-            System.out.println("New block mined with hash: " + bytesToHex(newBlock.getStoredHash()));
+            System.out.println("New block mined with hash: " + BlockChain.bytesToHex(newBlock.getStoredHash()));
         } else {
             System.out.println("Mining failed.");
         }
@@ -46,7 +51,7 @@ public class MiningTest {
         Block newBlock2 = miner.mine(); // Attempt to mine a new block
 
         if (newBlock2 != null) {
-            System.out.println("New block mined with hash: " + bytesToHex(newBlock2.getStoredHash()));
+            System.out.println("New block mined with hash: " + BlockChain.bytesToHex(newBlock2.getStoredHash()));
         } else {
             System.out.println("Mining failed.");
         }
@@ -60,19 +65,45 @@ public class MiningTest {
 
     }
 
-    // Helper method to convert a byte array to a hexadecimal string
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
+    public static void miningTest2 () throws Exception{
+        UserManager users = UserManager.getInstance();
+        MemPool memPool = MemPool.getInstance();
+        Miner miner = new Miner();
+
+        // Generate multiple users
+        for (int i = 0; i < 5; i++) {
+            users.addUser(new User("User" + i));
         }
 
-        // Pad with leading zeros if necessary to ensure the length is 32
-        while (hexString.length() < 64) { // 32 bytes = 64 hex characters
-            hexString.insert(0, '0');
+        // Create and add multiple transactions to the mempool
+        for (int i = 0; i < 12; i++) {
+            User sender = users.getUserByName("User" + (i % 5)); // Cycle through users
+            User receiver = users.getUserByName("User" + ((i + 1) % 5)); // Next user as receiver
+            Transaction transaction = sender.make_transaction(i + 1, receiver.address);
+            memPool.addTransaction(transaction);
         }
-        return hexString.toString();
+
+        // Print initial mempool
+        System.out.println("Initial MemPool: " + memPool + "\n\n");
+
+        // Mine three times
+        for (int i = 0; i < 3; i++) {
+            Block newBlock = miner.mine(); // Attempt to mine a new block
+
+            if (newBlock != null) {
+                System.out.println("New block mined with hash: " + BlockChain.bytesToHex(newBlock.getStoredHash()));
+            } else {
+                System.out.println("Mining failed.");
+            }
+
+            // Print the mempool after each mining attempt
+            System.out.println("MemPool after mining attempt " + (i + 1) + ": " + memPool + "\n\n");
+
+        }
+
+        System.out.println("Mining finished");
+        System.out.println("______________BLOCKCHAIN STATUS_______________");
+        System.out.println(BlockChain.getInstance());
     }
+
 }

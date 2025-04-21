@@ -13,8 +13,13 @@ public class BlockChain {
         return instance;
     }
 
+    public static BlockChain createNewBlockChain(){
+        instance = null;
+        return getInstance();
+    }
+
     public byte[] miningTargetValue = new
-            BigInteger("0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
+            BigInteger("0aFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
             .toByteArray();
 
     public List<Block> blocks = new ArrayList<>();
@@ -44,6 +49,7 @@ public class BlockChain {
 
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -56,6 +62,22 @@ public class BlockChain {
         }
 
         return sb.toString();
+    }
+
+    // Helper method to convert a byte array to a hexadecimal string
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+
+        // Pad with leading zeros if necessary to ensure the length is 32
+        while (hexString.length() < 64) { // 32 bytes = 64 hex characters
+            hexString.insert(0, '0');
+        }
+        return hexString.toString();
     }
 
 
