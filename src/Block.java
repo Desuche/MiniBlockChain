@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Block {
 
-    public byte[] hash;
+    private byte[] hash; // hash is private so it cannot be changed after it is set by the miner;
     public byte[] previousBlockHash;
     public String timestamp;
     public Long nonce;
@@ -49,11 +49,16 @@ public class Block {
 
 
     public void setBlockHash(){
-        this.hash = this.getHeaderHash();
+
+        // Only set the block hash once; further attempts to change the block hash will fail
+
+        if (this.hash == null){
+            this.hash = this.getHeaderHash();
+        }
 
     }
 
-    public byte[] getHash(){
+    public byte[] getBlockHash(){
         return this.hash;
     }
 
