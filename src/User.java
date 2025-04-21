@@ -1,6 +1,8 @@
 import javax.crypto.Cipher;
 import java.nio.ByteBuffer;
 import java.security.*;
+import java.util.Arrays;
+
 public class User {
     public String name; // Name of the user
     private final PrivateKey privateKey; // Private key for signing transactions
@@ -41,14 +43,12 @@ public class User {
 
             //Convert double to byte array
             byte[] dataBytes = ByteBuffer.allocate(8).putDouble(data).array();
-
             // Hash the Transaction data
             byte[] dataHash = digest.digest(dataBytes);
             // Generate a digital signature for the Transaction
-            byte[] signature = this.digital_signature_generation(new String(dataHash));
+            byte[] signature = this.digital_signature_generation(dataHash);
             // Create and return a new Transaction object
-            Transaction transaction=new Transaction(this.address, target_address, data,signature);
-            return transaction;
+            return new Transaction(this.address, target_address, data,signature);
         }
         else{
             throw new Exception("Insufficient funds: The amount exceeds the available wallet balance.");
@@ -58,11 +58,11 @@ public class User {
     }
 
     // Method to generate a digital signature using the private key
-    public byte[] digital_signature_generation(String plainText) throws Exception {
+    public byte[] digital_signature_generation(byte[] plainText) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA");
         //using private key to encrpt the message
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-        byte[] cipherText = cipher.doFinal(plainText.getBytes());
+        byte[] cipherText = cipher.doFinal(plainText);
         return cipherText;
     }
 
