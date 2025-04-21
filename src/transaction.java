@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Transaction {
     public byte[] transactionID; // Unique ID of the Transaction
+    public String transactionIDInHexFormat;
     public double data; // Amount being transferred
     public byte[] signature; // Digital signature of the Transaction
     public final byte[] sender_address; // Address of the sender
@@ -28,6 +29,7 @@ public class Transaction {
 
         // Generate the Transaction ID by hashing the header content
         this.transactionID = digest.digest(headerContent);
+        this.transactionIDInHexFormat = bytesToHex(this.transactionID);
     }
 
     // Getter for the Transaction data
@@ -38,7 +40,7 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "\n   ID=" + bytesToHex(transactionID) +
+                "\n   ID=" + transactionIDInHexFormat +
                 ", \n   sender=" + bytesToHex(sender_address) +
                 ", \n   receiver=" + bytesToHex(receiver_address) +
                 ", \n   amount=" + data +

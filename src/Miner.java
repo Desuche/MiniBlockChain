@@ -6,6 +6,11 @@ public class Miner {
     long TIMEOUT_MS = 150000; // Mining timeout in milliseconds
     int NUMBER_OF_TRANSACTIONS_TO_MINE = 5;
 
+    public Miner(){}
+    public Miner(int max_transactions_per_mining_attempt){
+        this.NUMBER_OF_TRANSACTIONS_TO_MINE = max_transactions_per_mining_attempt;
+    }
+
     public Block mine() throws Exception {
         Transaction[] transactions = MemPool.getInstance().collectTransactions(NUMBER_OF_TRANSACTIONS_TO_MINE); // Mine five earliest transactions
 

@@ -75,36 +75,38 @@ public class Block {
         }
     }
 
+    public Transaction findTransactionByID(String txnIdinHexFormat){
+        for ( Transaction t : this.transactions){
+            if (t.transactionIDInHexFormat.equals(txnIdinHexFormat)) return t;
+        }
+
+        return null;
+    }
+
+    public String getTransactionIDs(){
+        StringBuilder sb = new StringBuilder("[ ");
+        for (Transaction t: this.transactions){
+            sb.append(t.transactionIDInHexFormat + " ; ");
+        }
+        sb.append(" ] ");
+        return sb.toString();
+    }
+
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Block{\n");
-        sb.append("  hash=").append(bytesToHex(hash)).append(",\n");
-        sb.append("  previousBlockHash=").append(bytesToHex(previousBlockHash)).append(",\n");
+        sb.append("  hash=").append(BlockChain.bytesToHex(hash)).append(",\n");
+        sb.append("  previousBlockHash=").append(BlockChain.bytesToHex(previousBlockHash)).append(",\n");
         sb.append("  timestamp='").append(timestamp).append("',\n");
         sb.append("  nonce=").append(nonce).append(",\n");
-        sb.append("  difficulty=").append(bytesToHex(difficulty)).append(",\n");
-        sb.append("  merkleRoot=").append(bytesToHex(merkleRoot)).append(",\n");
+        sb.append("  difficulty=").append(BlockChain.bytesToHex(difficulty)).append(",\n");
+        sb.append("  merkleRoot=").append(BlockChain.bytesToHex(merkleRoot)).append(",\n");
         sb.append("  number of transactions=").append(transactions.size()).append(",\n");
         sb.append("}");
         return sb.toString();
     }
 
-    // Helper method to convert a byte array to a hexadecimal string
-    private String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-
-        // Pad with leading zeros if necessary to ensure the length is 32
-        while (hexString.length() < 64) { // 32 bytes = 64 hex characters
-            hexString.insert(0, '0');
-        }
-        return hexString.toString();
-    }
 
 
 

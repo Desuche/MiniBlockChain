@@ -34,7 +34,7 @@ public class MiningTest {
         Block newBlock = miner.mine(); // Attempt to mine a new block
 
         if (newBlock != null) {
-            System.out.println("New block mined with hash: " + bytesToHex(newBlock.getStoredHash()));
+            System.out.println("New block mined with hash: " + BlockChain.bytesToHex(newBlock.getStoredHash()));
         } else {
             System.out.println("Mining failed.");
         }
@@ -51,7 +51,7 @@ public class MiningTest {
         Block newBlock2 = miner.mine(); // Attempt to mine a new block
 
         if (newBlock2 != null) {
-            System.out.println("New block mined with hash: " + bytesToHex(newBlock2.getStoredHash()));
+            System.out.println("New block mined with hash: " + BlockChain.bytesToHex(newBlock2.getStoredHash()));
         } else {
             System.out.println("Mining failed.");
         }
@@ -91,7 +91,7 @@ public class MiningTest {
             Block newBlock = miner.mine(); // Attempt to mine a new block
 
             if (newBlock != null) {
-                System.out.println("New block mined with hash: " + bytesToHex(newBlock.getStoredHash()));
+                System.out.println("New block mined with hash: " + BlockChain.bytesToHex(newBlock.getStoredHash()));
             } else {
                 System.out.println("Mining failed.");
             }
@@ -106,19 +106,4 @@ public class MiningTest {
         System.out.println(BlockChain.getInstance());
     }
 
-    // Helper method to convert a byte array to a hexadecimal string
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-
-        // Pad with leading zeros if necessary to ensure the length is 32
-        while (hexString.length() < 64) { // 32 bytes = 64 hex characters
-            hexString.insert(0, '0');
-        }
-        return hexString.toString();
-    }
 }
