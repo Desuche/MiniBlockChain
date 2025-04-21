@@ -3,10 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Miner {
-    final long TIMEOUT_MS = 150000; // Mining timeout in milliseconds
+    long TIMEOUT_MS = 150000; // Mining timeout in milliseconds
+    int NUMBER_OF_TRANSACTIONS_TO_MINE = 5;
 
     public Block mine() throws Exception {
-        Transaction[] transactions = MemPool.getInstance().collectTransactions(5); // Mine five earliest transactions
+        Transaction[] transactions = MemPool.getInstance().collectTransactions(NUMBER_OF_TRANSACTIONS_TO_MINE); // Mine five earliest transactions
 
         // Filter valid transactions
         List<Transaction> validTransactions = new ArrayList<>();
@@ -80,14 +81,6 @@ public class Miner {
         return hexString.toString();
     }
 
-    public static void main(String[] args) throws Exception {
-        System.out.println(new
-                BigInteger("01a60d8893786c5d678b769c079e8e2d081d1729cf6177bd418c7aa6dd099efc", 16)
-                .compareTo(new
-                        BigInteger("0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
-                )
-        );
-    }
 
 
 }

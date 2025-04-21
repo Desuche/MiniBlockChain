@@ -38,11 +38,11 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "ID=" + bytesToHex(transactionID) +
-                ", sender=" + bytesToHex(sender_address) +
-                ", receiver=" + bytesToHex(receiver_address) +
-                ", amount=" + data +
-                '}';
+                "\n   ID=" + bytesToHex(transactionID) +
+                ", \n   sender=" + bytesToHex(sender_address) +
+                ", \n   receiver=" + bytesToHex(receiver_address) +
+                ", \n   amount=" + data +
+                "\n}";
     }
 
     // Helper method to convert a byte array to a hexadecimal string

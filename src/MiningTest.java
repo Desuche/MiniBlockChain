@@ -27,6 +27,7 @@ public class MiningTest {
         memPool.addTransaction(tx3);
 
         System.out.println(memPool);
+        System.out.println();
 
         // Start the mining process
         Miner miner = new Miner();
@@ -83,7 +84,7 @@ public class MiningTest {
         }
 
         // Print initial mempool
-        System.out.println("Initial MemPool: " + memPool);
+        System.out.println("Initial MemPool: " + memPool + "\n\n");
 
         // Mine three times
         for (int i = 0; i < 3; i++) {
@@ -96,7 +97,8 @@ public class MiningTest {
             }
 
             // Print the mempool after each mining attempt
-            System.out.println("MemPool after mining attempt " + (i + 1) + ": " + memPool);
+            System.out.println("MemPool after mining attempt " + (i + 1) + ": " + memPool + "\n\n");
+
         }
 
         System.out.println("Mining finished");

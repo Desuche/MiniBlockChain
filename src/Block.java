@@ -1,6 +1,7 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Block {
         this.timestamp = Instant.now().toString();
         this.nonce = 0L;
         this.difficulty = miningTargetValue;
-        List<Transaction> transactionList = Arrays.asList(transactions);
+        List<Transaction> transactionList = new ArrayList<>(Arrays.asList(transactions));
         this.merkleRoot = MerkleTree.createFromTransactionList(transactionList).getMerkleRoot();
         this.transactions = transactionList;
     }
@@ -84,6 +85,7 @@ public class Block {
         sb.append("  nonce=").append(nonce).append(",\n");
         sb.append("  difficulty=").append(bytesToHex(difficulty)).append(",\n");
         sb.append("  merkleRoot=").append(bytesToHex(merkleRoot)).append(",\n");
+        sb.append("  number of transactions=").append(transactions.size()).append(",\n");
         sb.append("}");
         return sb.toString();
     }

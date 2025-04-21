@@ -1,9 +1,7 @@
 import javax.crypto.Cipher;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Arrays;
 
@@ -14,6 +12,7 @@ public class Verifier {
     public static boolean verifyBlock(Block block, BlockChain blockchain) {
         // 1. Verify the block's own hash is valid
         if (!Arrays.equals(block.generateNewHash(), block.getStoredHash())) {
+            System.out.println("Verification Failed: block hash has changed! " + block);
             return false;
         }
 
@@ -24,10 +23,12 @@ public class Verifier {
         if (blockIndex > 0) {  // If not genesis block
             Block previousBlock = blockchain.blocks.get(blockIndex - 1);
             if (!Arrays.equals(previousBlockHash, previousBlock.getStoredHash())) {
+                System.out.println("Verification Failed: This block's 'prevBlockHash' breaks the blockchain sequence! " + block);
                 return false;
             }
         } else {  // Genesis block should have all zeros as previous hash
             if (!Arrays.equals(previousBlockHash, new byte[32])) {
+                System.out.println("Verification Failed: This block's 'prevBlockHash' breaks the blockchain sequence! " + block);
                 return false;
             }
         }
@@ -39,7 +40,18 @@ public class Verifier {
         byte[] generatedMerkleRoot = MerkleTree.createFromTransactionList(block.transactions).getMerkleRoot();
         byte[] storedMerkleRoot = block.merkleRoot;
 
-        return Arrays.equals(generatedMerkleRoot, storedMerkleRoot);
+        if (! Arrays.equals(generatedMerkleRoot, storedMerkleRoot)) {
+            System.out.println("Verification Failed: block has merkle root mismatch! " + block);
+            return false;
+        }
+
+        for (Transaction txn : block.transactions){
+            if (!verifySingleTransaction(txn)){
+                return false;
+            }
+        }
+
+        return true;
 
     }
 
@@ -64,7 +76,12 @@ public class Verifier {
         byte[] decryptedDataHash = cipher.doFinal(transaction.signature);
 
         // Verify transaction
-        return Arrays.equals(generatedDataHash, decryptedDataHash);
+        if (Arrays.equals(generatedDataHash, decryptedDataHash)){
+            return true;
+        } else {
+            System.out.println("Verification Failed: transaction has been altered! " + transaction);
+            return false;
+        }
     }
 
 
@@ -85,25 +102,25 @@ public class Verifier {
             try {
                 // Verify block structure and previous hash
                 if (!verifyBlock(currentBlock, blockChain)) {
-                    System.err.println("Block " + i + " failed structural verification");
+                    System.err.println("Verification Failed: Block " + i + " failed structural verification");
                     return false;
                 }
 
                 // Verify transactions and merkle root
                 if (!verifyBlockTransactions(currentBlock)) {
-                    System.err.println("Block " + i + " failed transaction verification");
+                    System.err.println("Verification Failed: Block " + i + " failed transaction verification");
                     return false;
                 }
 
                 // Verify proof of work
                 byte[] blockHash = currentBlock.getStoredHash();
                 if (new BigInteger(1, blockHash).compareTo(new BigInteger(1, blockChain.miningTargetValue)) >= 0) {
-                    System.err.println("Block " + i + " failed proof of work verification");
+                    System.err.println("Verification Failed: Block " + i + " failed proof of work verification");
                     return false;
                 }
 
             } catch (Exception e) {
-                System.err.println("Error verifying block " + i + ": " + e.getMessage());
+                System.err.println("Verification Failed: Error verifying block " + i + ": " + e.getMessage());
                 return false;
             }
         }

@@ -13,6 +13,11 @@ public class BlockChain {
         return instance;
     }
 
+    public static BlockChain createNewBlockChain(){
+        instance = null;
+        return getInstance();
+    }
+
     public byte[] miningTargetValue = new
             BigInteger("0aFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
             .toByteArray();
@@ -43,6 +48,7 @@ public class BlockChain {
         return true;
 
     }
+
 
     @Override
     public String toString() {
