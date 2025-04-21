@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Block {
 
+    private int blockNumber = -1; // -1 represents a pending block
     private byte[] hash; // hash is private so it cannot be changed after it is set by the miner;
     public byte[] previousBlockHash;
     public String timestamp;
@@ -26,7 +27,7 @@ public class Block {
         this.transactions = transactionList;
     }
 
-    public byte[] getHeaderHash() {
+    public byte[] generateNewHash() {
         MessageDigest headerHash = null;
         try {
             headerHash = MessageDigest.getInstance("SHA-256");
@@ -53,13 +54,24 @@ public class Block {
         // Only set the block hash once; further attempts to change the block hash will fail
 
         if (this.hash == null){
-            this.hash = this.getHeaderHash();
+            this.hash = this.generateNewHash();
         }
 
     }
 
-    public byte[] getBlockHash(){
+    public byte[] getStoredHash(){
         return this.hash;
+    }
+
+
+    public int getBlockNumber(){
+        return this.blockNumber;
+    }
+
+    public void setBlockNumber(int blockNumber){
+        if (this.blockNumber == -1){
+            this.blockNumber = blockNumber;
+        }
     }
 
 

@@ -26,7 +26,7 @@ public class Miner {
 
         while (true) {
             // Check if the hash meets the mining target
-            byte[] blockHash = block.getHeaderHash();
+            byte[] blockHash = block.generateNewHash();
             BigInteger hashValue = new BigInteger(1, blockHash);
             BigInteger target = new BigInteger(1, blockChain.miningTargetValue);
 

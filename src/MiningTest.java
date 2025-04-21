@@ -25,7 +25,7 @@ public class MiningTest {
         Block newBlock = miner.mine(); // Attempt to mine a new block
 
         if (newBlock != null) {
-            System.out.println("New block mined with hash: " + bytesToHex(newBlock.getHash()));
+            System.out.println("New block mined with hash: " + bytesToHex(newBlock.getStoredHash()));
             System.out.println(newBlock);
         } else {
             System.out.println("Mining failed.");
@@ -43,7 +43,7 @@ public class MiningTest {
         Block newBlock2 = miner.mine(); // Attempt to mine a new block
 
         if (newBlock2 != null) {
-            System.out.println("New block mined with hash: " + bytesToHex(newBlock2.getHash()));
+            System.out.println("New block mined with hash: " + bytesToHex(newBlock2.getStoredHash()));
             System.out.println(newBlock2);
         } else {
             System.out.println("Mining failed.");

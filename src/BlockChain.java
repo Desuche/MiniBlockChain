@@ -25,12 +25,12 @@ public class BlockChain {
             return new byte[32]; // 32 bytes of zeros
         } else{
             Block lastBlock = blocks.get(blocks.size() - 1);
-            return lastBlock.getHash();
+            return lastBlock.getStoredHash();
         }
     }
 
     public boolean addBlock(Block block){
-        byte[] blockHashValue = block.getHeaderHash();
+        byte[] blockHashValue = block.generateNewHash();
 
         boolean isProofOfWorkSatisfied = new BigInteger(blockHashValue).compareTo(new BigInteger(miningTargetValue)) < 0;
         if (!isProofOfWorkSatisfied){
@@ -38,6 +38,7 @@ public class BlockChain {
             return false;
         }
 
+        block.setBlockNumber(this.blocks.size());
         this.blocks.add(block);
         return true;
 
