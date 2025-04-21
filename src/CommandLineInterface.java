@@ -26,14 +26,7 @@ public class CommandLineInterface {
 
      */
 
-    public static void main(String[] args) {
-        while (true)
-            try {
-                new CommandLineInterface().start();
-            } catch (Exception e){
-                System.err.println("An Error Occurred: " + e);
-            }
-    }
+
     public void start() throws Exception {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -206,7 +199,7 @@ public class CommandLineInterface {
         scanner.close();
     }
 
-    private static void handleMaliciousActions(Scanner scanner) {
+    private static void handleMaliciousActions(Scanner scanner) throws Exception {
         System.out.println("Choose malicious action to perform:");
         System.out.println("1 - Change block header");
         System.out.println("2 - Add new transaction to block");
