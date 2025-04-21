@@ -1,13 +1,31 @@
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Miner {
     final long TIMEOUT_MS = 120000; // Mining timeout in milliseconds
 
     public Block mine() throws Exception {
         Transaction[] transactions = MemPool.getInstance().collectTransactions(5); // Mine five earliest transactions
-        BlockChain blockchain = BlockChain.getInstance();
-        Block newBlock = new Block(blockchain.getLastBlockHash(), transactions, blockchain.miningTargetValue);
 
+        // Filter valid transactions
+        List<Transaction> validTransactions = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (Verifier.verifySingleTransaction(transaction)) {
+                validTransactions.add(transaction);
+            }
+        }
+
+        // If no valid transactions were found, return null
+        if (validTransactions.isEmpty()) {
+            return null;
+        }
+
+        // Create a new block with the valid transactions
+        BlockChain blockchain = BlockChain.getInstance();
+        Block newBlock = new Block(blockchain.getLastBlockHash(), validTransactions.toArray(new Transaction[0]), blockchain.miningTargetValue);
+
+        // Attempt Proof of Work
         if (this.solveProofOfWork(newBlock, blockchain)){
             blockchain.addBlock(newBlock);
             return newBlock;

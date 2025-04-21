@@ -56,6 +56,8 @@ public class MiningTest {
         System.out.println(BlockChain.getInstance());
 
 
+
+
     }
 
     // Helper method to convert a byte array to a hexadecimal string
