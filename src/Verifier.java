@@ -1,4 +1,10 @@
+import javax.crypto.Cipher;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.util.Arrays;
 
 public class Verifier {
@@ -34,6 +40,34 @@ public class Verifier {
         byte[] storedMerkleRoot = block.merkleRoot;
 
         return Arrays.equals(generatedMerkleRoot, storedMerkleRoot);
+
+    }
+
+    public static boolean verifySingleTransaction(Transaction transaction) throws Exception{
+
+        // Get user that created this transaction
+        UserManager users = UserManager.getInstance();
+        User sender = users.getUserByAddress(transaction.sender_address);
+        PublicKey senderPubKey = sender.publicKey;
+
+        // Get hash of transaction amount
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+        byte[] dataBytes = ByteBuffer.allocate(8).putDouble(transaction.data).array();
+        byte[] generatedDataHash = digest.digest(dataBytes);
+
+
+        // Decrypt transaction signature
+        Cipher cipher = Cipher.getInstance("RSA");
+
+        //using private key to encrpt the message
+        cipher.init(Cipher.DECRYPT_MODE, senderPubKey);
+
+
+        byte[] decryptedDataHash = cipher.doFinal(transaction.signature);
+
+        return Arrays.equals(decryptedDataHash, generatedDataHash);
+
 
     }
 

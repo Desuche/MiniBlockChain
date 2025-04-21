@@ -6,7 +6,7 @@ public class User {
     private final PrivateKey privateKey; // Private key for signing transactions
     public final PublicKey publicKey; // Public key for verifying transactions
     public final byte[] address; // Unique address derived from the public key
-    private double wallet=100000; // Initial wallet balance for mining
+    private double wallet=100000; // Initial wallet balance
 
     // Constructor to initialize the user with a name and generate keys
     public User(String name) throws NoSuchAlgorithmException {
@@ -64,6 +64,30 @@ public class User {
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
         byte[] cipherText = cipher.doFinal(plainText.getBytes());
         return cipherText;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("User{name='%s', address='%s', publicKey='%s'}",
+                name,
+                bytesToHex(address),
+                bytesToHex(publicKey.getEncoded())
+        );
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+
+        // Pad with leading zeros if necessary to ensure the length is 32
+        while (hexString.length() < 64) { // 32 bytes = 64 hex characters
+            hexString.insert(0, '0');
+        }
+        return hexString.toString();
     }
 
 

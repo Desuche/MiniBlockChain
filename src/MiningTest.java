@@ -4,15 +4,19 @@ public class MiningTest {
 
         // Create a mempool instance
         MemPool memPool = MemPool.getInstance();
+        UserManager users = UserManager.getInstance();
 
         // Generate some dummy transactions
-        User alice = new User("Alice");
-        User bob = new User("Bob");
+        users.addUser(new User("Alice"));
+        users.addUser(new User("Bob"));
+        users.addUser(new User("Cassy"));
+
+        System.out.println(users);
 
         // Create and add transactions to the mempool
-        Transaction tx1 = alice.make_transaction(5, bob.address);
-        Transaction tx2 = alice.make_transaction(2, bob.address);
-        Transaction tx3 = bob.make_transaction(1, alice.address);
+        Transaction tx1 = users.getUserByName("Alice").make_transaction(5, users.getUserByName("Bob").address);
+        Transaction tx2 = users.getUserByName("Cassy").make_transaction(2, users.getUserByName("Alice").address);
+        Transaction tx3 = users.getUserByName("Bob").make_transaction(1, users.getUserByName("Cassy").address);
 
         memPool.addTransaction(tx1);
         memPool.addTransaction(tx2);
@@ -26,15 +30,14 @@ public class MiningTest {
 
         if (newBlock != null) {
             System.out.println("New block mined with hash: " + bytesToHex(newBlock.getStoredHash()));
-            System.out.println(newBlock);
         } else {
             System.out.println("Mining failed.");
         }
 
 
-        Transaction tx4 = alice.make_transaction(5, bob.address);
-        Transaction tx5 = alice.make_transaction(2, bob.address);
-        Transaction tx6 = bob.make_transaction(1, alice.address);
+        Transaction tx4 = users.getUserByName("Cassy").make_transaction(15, users.getUserByName("Bob").address);
+        Transaction tx5 = users.getUserByName("Bob").make_transaction(21, users.getUserByName("Alice").address);
+        Transaction tx6 = users.getUserByName("Alice").make_transaction(11, users.getUserByName("Cassy").address);
 
         memPool.addTransaction(tx4);
         memPool.addTransaction(tx5);
@@ -44,7 +47,6 @@ public class MiningTest {
 
         if (newBlock2 != null) {
             System.out.println("New block mined with hash: " + bytesToHex(newBlock2.getStoredHash()));
-            System.out.println(newBlock2);
         } else {
             System.out.println("Mining failed.");
         }
