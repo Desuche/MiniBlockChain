@@ -148,7 +148,253 @@ Validates transactions, blocks, and the entire blockchain. Ensures that the bloc
 \subsection{MerkleTree}
 Calculates the Merkle root for a set of transactions. Ensures transaction integrity within a block.
 
-This modular design ensures that each component is responsible for a specific functionality, making the system easier to maintain and extend.
+\subsection{Java Class Descriptions}
+
+\subsubsection{Block.java}
+\textbf{Abstract:} Represents a single block in the blockchain. It contains metadata such as the block number, hash, previous block hash, timestamp, nonce, difficulty, Merkle root, and transactions.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Stores transactions in a secure and immutable manner.
+    \item Links to the previous block to maintain the blockchain sequence.
+    \item Provides methods to generate and validate block hashes.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+Transaction[] transactions = {tx1, tx2};
+Block newBlock = new Block(previousBlockHash, transactions, miningTargetValue);
+System.out.println(newBlock);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{int blockNumber}: The block's position in the blockchain.
+    \item \texttt{byte[] hash}: The block's unique hash.
+    \item \texttt{byte[] previousBlockHash}: Hash of the previous block.
+    \item \texttt{String timestamp}: Timestamp of block creation.
+    \item \texttt{Long nonce}: Nonce used for proof of work.
+    \item \texttt{byte[] difficulty}: Mining difficulty target.
+    \item \texttt{byte[] merkleRoot}: Merkle root of the transactions.
+    \item \texttt{List<Transaction> transactions}: List of transactions in the block.
+\end{itemize}
+
+\subsubsection{BlockChain.java}
+\textbf{Abstract:} Manages the entire blockchain, including adding blocks, maintaining the chain's integrity, and verifying proof of work.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Stores the sequence of blocks.
+    \item Provides methods to add new blocks and retrieve the last block's hash.
+    \item Ensures proof of work is satisfied before adding a block.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+BlockChain blockchain = BlockChain.getInstance();
+blockchain.addBlock(newBlock);
+System.out.println(blockchain);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{byte[] miningTargetValue}: The target value for proof of work.
+    \item \texttt{List<Block> blocks}: List of all blocks in the blockchain.
+\end{itemize}
+
+\subsubsection{Transaction.java}
+\textbf{Abstract:} Represents a transaction between two users, including the sender, receiver, amount, and digital signature.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Encapsulates transaction details.
+    \item Provides methods to generate a unique transaction ID and validate the transaction.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+Transaction tx = new Transaction(senderAddress, receiverAddress, amount, signature);
+System.out.println(tx);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{byte[] transactionID}: Unique ID of the transaction.
+    \item \texttt{double data}: Amount being transferred.
+    \item \texttt{byte[] signature}: Digital signature of the transaction.
+    \item \texttt{byte[] sender\_address}: Address of the sender.
+    \item \texttt{byte[] receiver\_address}: Address of the receiver.
+\end{itemize}
+
+\subsubsection{User.java}
+\textbf{Abstract:} Represents a user in the blockchain system, including their name, wallet balance, and cryptographic keys.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Generates public-private key pairs for users.
+    \item Allows users to create transactions.
+    \item Manages wallet balances.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+User user = new User("Alice");
+Transaction tx = user.make_transaction(100, receiverAddress);
+System.out.println(user);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{String name}: Name of the user.
+    \item \texttt{PrivateKey privateKey}: Private key for signing transactions.
+    \item \texttt{PublicKey publicKey}: Public key for verifying transactions.
+    \item \texttt{byte[] address}: Unique address derived from the public key.
+    \item \texttt{double wallet}: Wallet balance.
+\end{itemize}
+
+\subsubsection{UserManager.java}
+\textbf{Abstract:} Manages all users in the blockchain system, providing methods to add, remove, and retrieve users.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Maintains a registry of users by name and address.
+    \item Provides singleton access to the user manager.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+UserManager userManager = UserManager.getInstance();
+userManager.addUser(new User("Bob"));
+System.out.println(userManager);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{Map<String, User> usersByName}: Maps user names to user objects.
+    \item \texttt{Map<String, User> usersByAddress}: Maps user addresses to user objects.
+\end{itemize}
+
+\subsubsection{MemPool.java}
+\textbf{Abstract:} Represents the memory pool where pending transactions are stored before being included in a block.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Collects transactions for mining.
+    \item Provides methods to add and retrieve transactions.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+MemPool memPool = MemPool.getInstance();
+memPool.addTransaction(tx);
+Transaction[] transactions = memPool.collectTransactions(5);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{Queue<Transaction> pendingTransactions}: Queue of pending transactions.
+\end{itemize}
+
+\subsubsection{Miner.java}
+\textbf{Abstract:} Handles the mining process, including collecting transactions, creating new blocks, and solving proof of work.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Mines new blocks by solving proof of work.
+    \item Filters valid transactions from the mempool.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+Miner miner = new Miner();
+Block newBlock = miner.mine();
+System.out.println(newBlock);
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{long TIMEOUT\_MS}: Mining timeout in milliseconds.
+    \item \texttt{int NUMBER\_OF\_TRANSACTIONS\_TO\_MINE}: Maximum transactions per block.
+\end{itemize}
+
+\subsubsection{MerkleTree.java}
+\textbf{Abstract:} Generates a Merkle tree from a list of transactions and calculates the Merkle root.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Ensures data integrity by summarizing transactions into a single hash.
+    \item Provides methods to calculate and print the Merkle root.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+MerkleTree merkleTree = MerkleTree.createFromTransactionList(transactions);
+byte[] merkleRoot = merkleTree.getMerkleRoot();
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item \texttt{List<byte[]> transactions}: List of transaction IDs.
+\end{itemize}
+
+\subsubsection{Verifier.java}
+\textbf{Abstract:} Provides methods to verify the integrity of blocks, transactions, and the entire blockchain.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Verifies block headers, transactions, and Merkle roots.
+    \item Ensures the blockchain's integrity.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+boolean isValid = Verifier.verifyBlockChain(blockchain);
+System.out.println(isValid ? "Blockchain is valid" : "Blockchain is invalid");
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item None specific, but methods like \texttt{verifyBlockHeader}, \texttt{verifyBlockTransactions}, and \texttt{verifySingleTransaction} are critical.
+\end{itemize}
+
+\subsubsection{CommandLineInterface.java}
+\textbf{Abstract:} Provides a command-line interface for interacting with the blockchain system.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Allows users to view the blockchain, create users, perform transactions, mine blocks, and verify the blockchain.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+CommandLineInterface cli = new CommandLineInterface();
+cli.start();
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item None specific, but it interacts with all other classes.
+\end{itemize}
+
+\subsubsection{Main.java}
+\textbf{Abstract:} The entry point of the application, which starts the command-line interface.
+
+\textbf{Usages:}
+\begin{itemize}
+    \item Initializes the blockchain system and provides a user interface.
+\end{itemize}
+
+\textbf{Example Code:}
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) {
+    new CommandLineInterface().start();
+}
+\end{lstlisting}
+
+\textbf{Important Variables:}
+\begin{itemize}
+    \item None specific.
+\end{itemize}
 
 \section{Design and Implementation Details}
 
@@ -278,11 +524,23 @@ This design ensures modularity, security, and scalability for the blockchain sys
 
 \section{Experimental Results}
 \subsection{Simulation}
+The simulation of the MiniBlockchain system was conducted to validate its core functionalities, including transaction validation, mining, and blockchain verification. Below are the detailed results:
+
 \begin{itemize}
-    \item \textbf{Transaction Validation}: Verified transactions before and after tampering.
-    \item \textbf{Mining}: Successfully mined blocks with valid transactions.
-    \item \textbf{Blockchain Verification}: Ensured the integrity of the blockchain after adding blocks.
+    \item \textbf{Transaction Validation}: Transactions were tested for validity before and after tampering. Initially, valid transactions were successfully verified using the implemented verification mechanism. When transaction details, such as the amount, were altered, the system detected the tampering and flagged the transaction as invalid. This demonstrates the robustness of the digital signature mechanism in ensuring transaction integrity.
+
+    \item \textbf{Mining Process}: The mining process was simulated with multiple transactions in the mempool. Miners successfully collected valid transactions, created new blocks, and solved the proof-of-work puzzle within the specified timeout. The mined blocks were added to the blockchain, and their hashes satisfied the difficulty target. This highlights the effectiveness of the proof-of-work mechanism in maintaining blockchain security.
+
+    \item \textbf{Blockchain Verification}: The entire blockchain was verified to ensure its integrity. Each block's header, transactions, and proof-of-work were validated. The verification process successfully detected tampered blocks and flagged them as invalid. This demonstrates the system's ability to maintain a tamper-proof and consistent blockchain.
+
+    \item \textbf{Merkle Tree Validation}: The Merkle tree was used to verify the integrity of transactions within a block. The generated Merkle root matched the stored Merkle root for valid blocks. When transactions were altered, the Merkle root mismatch was detected, ensuring the integrity of the block's transaction data.
+
+    \item \textbf{Performance Observations}: Mining time increased with the difficulty of the proof-of-work puzzle, as expected. This demonstrates the scalability of the mining process and its ability to adapt to varying difficulty levels. The system efficiently handled multiple transactions and users, showcasing its capability to simulate a realistic blockchain environment.
+
+    \item \textbf{Malicious Actions}: Various malicious actions, such as altering block headers, adding fraudulent transactions, and modifying existing transactions, were simulated. The system successfully detected these actions during the verification process, ensuring the blockchain's security and reliability.
 \end{itemize}
+
+These results validate the MiniBlockchain project's implementation of core blockchain functionalities, including transaction validation, mining, and verification. The system effectively ensures data integrity, security, and consistency, making it a reliable educational tool for understanding blockchain technology.
 
 \subsection{Observations}
 \begin{itemize}
