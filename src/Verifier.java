@@ -9,7 +9,7 @@ public class Verifier {
 
 
 
-    public static boolean verifyBlock(Block block, BlockChain blockchain) {
+    public static boolean verifyBlockHeader(Block block, BlockChain blockchain) {
         // 1. Verify the block's own hash is valid
         if (!Arrays.equals(block.generateNewHash(), block.getStoredHash())) {
             System.out.println("Verification Failed: block hash has changed! " + block);
@@ -101,7 +101,7 @@ public class Verifier {
 
             try {
                 // Verify block structure and previous hash
-                if (!verifyBlock(currentBlock, blockChain)) {
+                if (!verifyBlockHeader(currentBlock, blockChain)) {
                     System.err.println("Verification Failed: Block " + i + " failed structural verification");
                     return false;
                 }

@@ -53,14 +53,14 @@ public class VerificationTest {
         System.out.println("Test 1: Change block header");
         System.out.println("Before block header is altered");
         System.out.println(testBlock1);
-        System.out.println("valid = " + Verifier.verifyBlock(testBlock1, BlockChain.getInstance()));
+        System.out.println("valid = " + Verifier.verifyBlockHeader(testBlock1, BlockChain.getInstance()));
 
         //Tamper with block header
         System.out.println("Changing block header");
         testBlock1.timestamp = Instant.now().toString() + "~changed~";
 
         System.out.println("Verifying Block header");
-        System.out.println("valid = " + Verifier.verifyBlock(testBlock1, BlockChain.getInstance()));
+        System.out.println("valid = " + Verifier.verifyBlockHeader(testBlock1, BlockChain.getInstance()));
 
 
         // Test 2: add a new block transaction
