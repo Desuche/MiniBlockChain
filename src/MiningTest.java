@@ -1,6 +1,10 @@
 public class MiningTest {
-    public static void main(String[] args) throws Exception {
 
+    public static void main(String[] args) throws Exception{
+        miningTest2();
+    }
+
+    public static void miningTest1() throws Exception{
 
         // Create a mempool instance
         MemPool memPool = MemPool.getInstance();
@@ -58,6 +62,46 @@ public class MiningTest {
 
 
 
+    }
+
+    public static void miningTest2 () throws Exception{
+        UserManager users = UserManager.getInstance();
+        MemPool memPool = MemPool.getInstance();
+        Miner miner = new Miner();
+
+        // Generate multiple users
+        for (int i = 0; i < 5; i++) {
+            users.addUser(new User("User" + i));
+        }
+
+        // Create and add multiple transactions to the mempool
+        for (int i = 0; i < 12; i++) {
+            User sender = users.getUserByName("User" + (i % 5)); // Cycle through users
+            User receiver = users.getUserByName("User" + ((i + 1) % 5)); // Next user as receiver
+            Transaction transaction = sender.make_transaction(i + 1, receiver.address);
+            memPool.addTransaction(transaction);
+        }
+
+        // Print initial mempool
+        System.out.println("Initial MemPool: " + memPool);
+
+        // Mine three times
+        for (int i = 0; i < 3; i++) {
+            Block newBlock = miner.mine(); // Attempt to mine a new block
+
+            if (newBlock != null) {
+                System.out.println("New block mined with hash: " + bytesToHex(newBlock.getStoredHash()));
+            } else {
+                System.out.println("Mining failed.");
+            }
+
+            // Print the mempool after each mining attempt
+            System.out.println("MemPool after mining attempt " + (i + 1) + ": " + memPool);
+        }
+
+        System.out.println("Mining finished");
+        System.out.println("______________BLOCKCHAIN STATUS_______________");
+        System.out.println(BlockChain.getInstance());
     }
 
     // Helper method to convert a byte array to a hexadecimal string

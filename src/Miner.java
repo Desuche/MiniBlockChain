@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Miner {
-    final long TIMEOUT_MS = 120000; // Mining timeout in milliseconds
+    final long TIMEOUT_MS = 150000; // Mining timeout in milliseconds
 
     public Block mine() throws Exception {
         Transaction[] transactions = MemPool.getInstance().collectTransactions(5); // Mine five earliest transactions

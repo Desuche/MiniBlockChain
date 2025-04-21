@@ -14,7 +14,7 @@ public class BlockChain {
     }
 
     public byte[] miningTargetValue = new
-            BigInteger("0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
+            BigInteger("0aFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",16)
             .toByteArray();
 
     public List<Block> blocks = new ArrayList<>();
