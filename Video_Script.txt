@@ -1,0 +1,63 @@
+[5-Minute Video Presentation Script]
+
+[00:00-00:30] Introduction & Motivation
+"Hello, today we're presenting our MiniBlockchain project, a simplified yet functional implementation of blockchain technology. The motivation behind this project was to create an educational tool that demonstrates the core principles of blockchain systems. In today's digital age, understanding blockchain technology is crucial as it forms the foundation of many modern financial and data systems.
+
+[00:30-01:30] Core Features & Architecture
+Our MiniBlockchain implementation includes several key components:
+- A secure transaction system using RSA encryption for digital signatures
+- A proof-of-work mining system that maintains blockchain integrity
+- Merkle trees for efficient transaction verification
+- A mempool for managing pending transactions
+- A comprehensive verification system to detect tampering
+
+The system is built with a modular architecture, making it easy to understand and extend. Each component, from the User Manager to the Block Miner, has a specific role in maintaining the blockchain's security and functionality.
+
+[01:30-02:30] Implementation Details
+We implemented the project in Java, leveraging its robust cryptographic libraries. The system follows these key processes:
+1. Users create transactions with digital signatures
+2. Transactions enter the mempool
+3. Miners collect transactions and solve proof-of-work puzzles
+4. Verified blocks are added to the blockchain
+5. The system continuously verifies the chain's integrity
+
+[02:30-03:00] Program Demonstration
+Let me show you how to use our MiniBlockchain system. The program offers a simple command-line interface with several key operations:
+1. Users can view the blockchain's current state
+2. Create new users with unique wallets
+3. Create and submit transactions to the mempool
+4. Mine new blocks with pending transactions
+5. View detailed information about blocks and transactions
+6. Verify the blockchain's integrity
+
+Let's walk through a typical usage scenario:
+1. First, we'll create two users - "Alice" and "Bob" using option 2
+2. Using option 3, we can verify both users are registered with their unique wallet addresses
+3. Next, we'll create a transaction where Alice sends 10 coins to Bob using option 4
+4. Using option 5, we can see this transaction waiting in the mempool
+5. We'll then mine a new block using option 6, which will include our transaction
+6. Finally, using option 10, we can verify the blockchain's integrity
+
+For educational purposes, we've also included a "malicious actions" menu that demonstrates common attack vectors and shows how our security measures detect and prevent tampering.
+
+[03:00-03:30] Security Features
+Security is paramount in our implementation. We demonstrate this through:
+- RSA encryption for transaction signatures
+- SHA-256 hashing for block validation
+- Merkle trees for transaction verification
+- Comprehensive verification systems to detect tampering attempts
+
+[03:30-04:30] Experimental Results
+Our testing demonstrated the system's robustness:
+- Successfully detected and rejected tampered transactions
+- Maintained blockchain integrity under various attack scenarios
+- Efficiently handled multiple concurrent transactions
+- Proved the effectiveness of our proof-of-work implementation
+- Demonstrated successful transaction verification through Merkle trees
+
+[04:30-05:00] Conclusion
+The MiniBlockchain project successfully demonstrates the fundamental concepts of blockchain technology in a practical, educational context. It provides a solid foundation for understanding blockchain principles and can be extended to include more advanced features like smart contracts and consensus algorithms.
+
+Thank you for your attention."
+
+[End of Script]
