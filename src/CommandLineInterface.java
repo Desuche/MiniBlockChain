@@ -394,7 +394,6 @@ public class CommandLineInterface {
             case 3:
                 // Verify a particular transaction
                 System.out.print("Enter block ID: ");
-                String blockIdForTxn = scanner.nextLine();
 
                 int txnBlockNumber = scanner.nextInt();
                 scanner.nextLine(); // consume dangling next line
